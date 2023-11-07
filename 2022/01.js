@@ -6,18 +6,21 @@ function main() {
     let current = 0;
     filedata.forEach((elf) => {
         current = elf.split('\r\n').reduce((acc, i) => acc + parseInt(i), 0);
-        if (max[0] < current) {
-            max[2] = max[1];
-            max[1] = max[0];
-            max[0] = current;
-        } else if (max[1] < current) {
-            max[2] = max[1];
-            max[1] = current;
-        } else if (max[2] < current) {
-            max[2] = current;
-        }
+        insert(max, current);
     });
     console.log(max.reduce((acc, i) => acc + i, 0));
+}
+
+function insert(ary, elem) { // in-place insertion of the next max value, preserving desc order
+    for (i = 0; i < ary.length; i++) {
+        if (ary[i] < elem) {
+            for (j = ary.length - 1; j > i; j--) {
+                ary[j] = ary[j - 1];
+            }
+            ary[i] = elem;
+            return;
+        }
+    }
 }
 
 /* Part 1
