@@ -10,7 +10,7 @@ function main() {
         max1 = line[0][1];
         min2 = line[1][0];
         max2 = line[1][1];
-        if (!(max1 < min2 && min1 < min2) &&
+        if (!(max1 < min2 && min1 < min2) && // remove cases where one range completely outside the other
           !(max2 < min1 && min2 < min1)) {
             count += 1;
         }
