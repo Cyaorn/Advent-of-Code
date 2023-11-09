@@ -18,7 +18,7 @@ class FileTree {
         if (this.filetype === filetype.File) {
             return this.size;
         }
-        return this.children.reduce((acc, next) => acc + next.getFileSize, 0);
+        return this.children.reduce((acc, next) => acc + next.getFileSize(), 0);
     }
 
     printTree(spacer=0) {
@@ -35,19 +35,19 @@ class FileTree {
 }
 
 function main() {
-    let filedata = fs.readFileSync('07sample.txt').toString().split('\r\n');
+    let filedata = fs.readFileSync('07.txt').toString().split('\r\n');
     let root = new FileTree(filetype.Directory, 0, '/', null);
     let current = root;
     let i = 1; // first line is the only '$ cd /' command
 
     // build FileTree
     while (i < filedata.length) {
-        console.log(`Line ${i}: ` + filedata[i]);
+        // console.log(`Line ${i}: ` + filedata[i]);
         if (filedata[i].substring(0, 4) === '$ ls') { // establish children
-            console.log(`ls command detected, showing contents of ${current.filename}`);
+            // console.log(`ls command detected, showing contents of ${current.filename}`);
             i++;
             while (i < filedata.length && filedata[i].substring(0, 2) !== '$ ') { // while there are no commands next, build tree structure
-                console.log(filedata[i]);
+                // console.log(filedata[i]);
                 if (filedata[i].substring(0, 4) === 'dir ') { // child directory
                     current.children.push(
                       new FileTree(filetype.Directory, 0, filedata[i].substring(4), current)
@@ -60,13 +60,13 @@ function main() {
                 }   
                 i++;
             }
-            console.log(current.children);
+            // console.log(current.children);
         } else if (filedata[i].substring(0, 5) === '$ cd ') {
             if (filedata[i].substring(5) === '..') {
-                console.log(`Changing directory to ${current.parent.filename}`);
+                // console.log(`Changing directory to ${current.parent.filename}`);
                 current = current.parent;
             } else {
-                console.log(`Changing directory to ${filedata[i].substring(5)}`);
+                // console.log(`Changing directory to ${filedata[i].substring(5)}`);
                 current.children.forEach((child) => { // a bit inefficient, would probably be better with hashing
                     if (child.filename === filedata[i].substring(5)) {
                         current = child;
@@ -76,9 +76,27 @@ function main() {
             i++; // increment only in this clause because ls command autoincrement already
         }
     }
-    // root.printTree();
+    root.printTree();
 
-    
+    console.log(traverse(root));
+}
+
+function traverse(tree) { // This is very inefficient because it runs getFileSize() for every subdirectory
+    if (tree.filetype === filetype.File) {
+        return 0;
+    }
+    out = 0;
+    tree.children.filter((child) => child.filetype === filetype.Directory)
+      .forEach((child) => {
+            out += traverse(child);
+        }
+    )
+    total_size = tree.getFileSize();
+    console.log(`Size of directory ${tree.filename}: ${total_size}`);
+    if (total_size <= 100000) {
+        out += total_size;
+    }
+    return out;
 }
 
 main();
