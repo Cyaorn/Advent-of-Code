@@ -41,8 +41,6 @@ function main() {
     for (i = 0; i < cols; i++) {
         max_heights[rows - 1][i].S = trees[rows - 1][i];
     }
-    
-
     // derive inner values from nearest outmost value in whichever direction
     console.log(max_heights);
 
