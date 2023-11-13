@@ -1,5 +1,12 @@
 const fs = require('fs')
 
+/*
+Main takeaways from this problem
+- DO NOT use the same variables for nested for loops, even in different scopes, it kinda messes things up
+- sometimes you just gotta buckle down and write out what you want to happen by hand, and then go from there
+- I kept in all the comments for Part 2 to showcase a bit of the madness
+*/
+
 function printGrid(grid, x, y, dx, dy) {
     dx_sum = dx.reduce((acc, x, l) => {acc.push(acc[l] + x); return acc;}, [0]).slice(1);
     dy_sum = dy.reduce((acc, y, l) => {acc.push(acc[l] + y); return acc;}, [0]).slice(1);
