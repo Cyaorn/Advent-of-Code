@@ -22,7 +22,6 @@ function generateFunction(tokens) { // function to generate a new function that 
     }
 }
 
-/* Part 1
 function main() {
     let filedata = fs.readFileSync('11.txt').toString().split('\r\n\r\n');
     let monkeys = [];
@@ -68,6 +67,6 @@ function main() {
     }
     monkeys.sort((a, b) => b.activity - a.activity);
     console.log(monkeys[0].activity * monkeys[1].activity);
-} */
+}
 
 main();
