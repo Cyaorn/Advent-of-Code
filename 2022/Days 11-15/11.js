@@ -31,10 +31,9 @@ function gcd(a, b) {
     return a; 
 } 
   
-function get_lcm(a, b) { 
+function get_lcm(a, b) { // code snippet courtesy of Geeksforgeeks.com
     return (a * b) / gcd(a, b); 
 } 
-
 
 function main() {
     let filedata = fs.readFileSync('11.txt').toString().split('\r\n\r\n');
