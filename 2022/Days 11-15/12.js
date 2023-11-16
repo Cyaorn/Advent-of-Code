@@ -69,6 +69,74 @@ function main() {
     filedata.forEach((line, i) => {
         grid.push(row);
         [...line].forEach((char, j) => {
+            if (char === 'S') { 
+                start_y = i;
+                start_x = j;
+                grid[i].push(0);
+            } else if (char === 'E') {
+                end_y = i;
+                end_x = j;
+                grid[i].push(25);
+            } else {
+                grid[i].push(values[char]);
+            }
+        });
+        row = new Array();
+    });
+
+    let min_steps = Array(filedata.length).fill(0).map(_ => (new Array(filedata[0].length)).fill(-1));
+    min_steps[start_y][start_x] = 0; 
+
+    // change for Part 2: initialize every min_step value for 'a' as a start point
+    for (d = 0; d < grid.length; d++) {
+        for (e = 0; e < grid[d].length; e++) {
+            if (grid[d][e] === 0) {
+                min_steps[d][e] = 0;
+            }
+        }
+    }
+    let min_steps_next = Array(filedata.length).fill(0).map(_ => (new Array(filedata[0].length)).fill(-1));
+    
+    // pretty sure this is like O(n^4) because it checks the entire array for worst-case every cell in the array
+    while (min_steps[end_y][end_x] === -1) {
+        min_steps.forEach((row, i) => {
+            row.forEach((cell, j) => {
+                if (cell >= 0) {
+                    min_steps_next[i][j] = min_steps[i][j];
+                } else {
+                    min_steps_next[i][j] = get_next_step(grid, min_steps, i, j);
+                }
+            });
+        });
+        min_steps = min_steps_next;
+        min_steps_next = Array(filedata.length).fill(0).map(_ => (new Array(filedata[0].length)).fill(-1));
+        // console.log(get_checksum(min_steps));
+    }
+    print_grid(min_steps)
+    console.log(min_steps[end_y][end_x]);
+}
+
+/* Part 1
+function main() {
+    let filedata = fs.readFileSync('12.txt').toString().split('\r\n');
+
+    // establish relative values for each letter in the alphabet
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const values = {};
+    [...alphabet].forEach((letter, i) => { 
+        values[letter] = i;
+    });
+
+    // fill in grid with puzzle input
+    let grid = new Array();
+    let row = new Array();
+    let start_x = 0;
+    let start_y = 0;
+    let end_x = 0;
+    let end_y = 0;
+    filedata.forEach((line, i) => {
+        grid.push(row);
+        [...line].forEach((char, j) => {
             if (char === 'S') {
                 start_y = i;
                 start_x = j;
@@ -107,6 +175,6 @@ function main() {
     }
     // print_grid(min_steps)
     console.log(min_steps[end_y][end_x]);
-}
+} */
 
 main();
