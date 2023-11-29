@@ -1,15 +1,5 @@
 const fs = require('fs')
 
-function main() {
-    let filedata = fs.readFileSync('13.txt').toString().split('\r\n\r\n');
-    let count = 0;
-    filedata.forEach((pair, index) => {
-        [left, right] = pair.split('\r\n').map(x => JSON.parse(x)); 
-        count += compare(left, right) === -1 ? 0 : (index + 1);
-    });
-    console.log(count);
-}
-
 function compare(left, right) { // return 1 if left < right, 0 if equal, -1 if right < left
     if (Array.isArray(left)) {
         if (Array.isArray(right)) {
@@ -56,5 +46,39 @@ function compare(left, right) { // return 1 if left < right, 0 if equal, -1 if r
         }
     }
 }
+
+function main() {
+    let filedata = fs.readFileSync('13.txt').toString().split('\r\n\r\n');
+    let packets = [];
+    filedata.forEach((pair, index) => {
+        [left, right] = pair.split('\r\n').map(x => JSON.parse(x)); 
+        packets.push(left);
+        packets.push(right);
+    });
+    packets.push([[2]]);
+    packets.push([[6]]);
+    packets = packets.sort((a, b) => compare(a, b) * -1);
+    let divider2 = -1;
+    let divider6 = -1;
+    packets.forEach((packet, index) => {
+        if (compare(packet, [[2]]) === 0) {
+            divider2 = index + 1;
+        } else if (compare(packet, [[6]]) === 0) {
+            divider6 = index + 1;
+        }
+    });
+    console.log(divider2 * divider6);
+}
+
+/* Part 1
+function main() {
+    let filedata = fs.readFileSync('13.txt').toString().split('\r\n\r\n');
+    let count = 0;
+    filedata.forEach((pair, index) => {
+        [left, right] = pair.split('\r\n').map(x => JSON.parse(x)); 
+        count += compare(left, right) === -1 ? 0 : (index + 1);
+    });
+    console.log(count);
+} */
 
 main();
