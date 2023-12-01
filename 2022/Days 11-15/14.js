@@ -64,7 +64,6 @@ function main() {
                 x1 = segments[i + 1][0];
                 y0 = segment[1];
                 y1 = segments[i + 1][1];
-                // console.log(x0, y0, x1, y1);
                 if (y0 != y1) { // differ by y-value
                     for (j = Math.min(y0, y1); j <= Math.max(y0, y1); j++) {
                         cave[j][x0] = '#';
